@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tenant Commons</title>
+  <meta name="description" content="Who owns your building? Tenant Commons combines public records and what tenants know into shared infrastructure for tenant organizing in Vancouver.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <header><b>Tenant Commons</b></header>
+      <main class="main">
+        <h1>Who owns your building?</h1>
+        <!-- Without JavaScript the form still opens the map, just not at the address. -->
+        <form class="search" id="search" action="https://map.tenantcommons.ca/" method="get" autocomplete="off">
+          <div class="box">
+            <input id="address" type="text" placeholder="Your address, e.g. 1865 E 10th Ave"
+                   aria-label="Your address" role="combobox" aria-autocomplete="list"
+                   aria-expanded="false" aria-controls="suggestions" spellcheck="false">
+            <button type="submit">Find on map</button>
+          </div>
+          <ul class="suggestions" id="suggestions" role="listbox" hidden></ul>
+        </form>
+        <p class="fine" id="status" aria-live="polite">City of Vancouver addresses. Your address isn't stored.</p>
+        <p class="cont"><b>What else do they own?</b> What is it all worth? Is it up for rezoning or development? These should be easy questions. Tenant Commons is building the tools and shared records to answer them.</p>
+      </main>
+      <a class="more" href="#about">Read more ⌄</a>
+    </section>
+
+    <section id="about">
+      <h2>About</h2>
+      <p>Tenant Commons is building shared, lasting infrastructure for tenant organizing. It combines public information, like City of Vancouver open data, rental licences and records released through freedom of information requests, into one place, and adds what tenants and organizers learn about who is really behind a building. It starts with who owns and manages Vancouver's rental buildings.</p>
+      <p>Questions, corrections, or want to get involved? Write to <a href="mailto:info@tenantcommons.ca">info@tenantcommons.ca</a>.</p>
+    </section>
+  </div>
+</body>
+</html>
