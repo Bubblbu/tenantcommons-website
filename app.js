@@ -65,6 +65,22 @@ function deepLink(candidate) {
   return `${MAP_URL}#${params}`;
 }
 
+const DIRECTIONS = new Set(['N', 'S', 'E', 'W', 'NE', 'NW', 'SE', 'SW']);
+const STREET_TYPES = { AV: 'Ave' };
+
+/**
+ * The City's spelling for display: "1865 E 10TH AV" reads "1865 E 10th Ave".
+ * Display only: the geocoder and the map get the City's spelling.
+ */
+function displayAddress(text) {
+  return text.split(' ').map((w) => {
+    if (DIRECTIONS.has(w)) return w;
+    if (STREET_TYPES[w]) return STREET_TYPES[w];
+    if (/^\d/.test(w)) return w.toLowerCase();
+    return w.charAt(0) + w.slice(1).toLowerCase();
+  }).join(' ');
+}
+
 function init() {
   const form = document.getElementById('search');
   const input = document.getElementById('address');
@@ -88,7 +104,7 @@ function init() {
       const li = document.createElement('li');
       li.id = `suggestion-${i}`;
       li.setAttribute('role', 'option');
-      li.textContent = s.text;
+      li.textContent = displayAddress(s.text);
       li.setAttribute('aria-selected', String(i === active));
       // mousedown, not click: click would fire after the input's blur closes the list.
       li.addEventListener('mousedown', (e) => { e.preventDefault(); go(s.text, s.magicKey); });
@@ -108,7 +124,8 @@ function init() {
 
   async function go(text, magicKey) {
     close();
-    input.value = text;
+    // A picked suggestion is in the City's capitals; typed text stays as typed.
+    if (magicKey) input.value = displayAddress(text);
     button.disabled = true;
     setStatus('Finding your building…');
     try {
