@@ -12,13 +12,57 @@
 <body>
   <div class="wrap">
     <section class="hero">
-      <header><b>Tenant Commons</b></header>
+      <header class="nav">
+        <a class="brand" href="#">Tenant Commons</a>
+        <nav aria-label="Main">
+          <a href="#about">About</a>
+          <a href="#features">Features</a>
+          <a href="#contact">Contact</a>
+          <a class="cta" href="https://map.tenantcommons.ca/">Open the map</a>
+        </nav>
+      </header>
       <main class="main">
         <h1>Who owns your building?</h1>
+        <!-- Rando Sans draws its letters six ways: the default and stylistic sets ss01–ss05.
+             Fonts always shape text the same way, so each letter picks one here, never the same as its neighbour's,
+             and picks again every 800ms, like a hand-drawn animation. It holds still while someone types an address
+             just below, and reduced motion keeps the first pick. Screen readers get the whole text from the label. -->
+        <script>
+          { const h1 = document.querySelector('h1');
+            const letters = [...h1.textContent].map((c) => {
+              if (c === ' ') return c;
+              const span = document.createElement('span');
+              span.textContent = c;
+              span.setAttribute('aria-hidden', 'true');
+              return span;
+            });
+            const spans = letters.filter((l) => typeof l !== 'string');
+            function draw() {
+              let prev = 0;
+              for (const span of spans) {
+                prev = (prev + 1 + Math.floor(Math.random() * 5)) % 6;
+                span.style.fontFeatureSettings = prev ? `"ss0${prev}"` : '';
+              }
+            }
+            h1.setAttribute('aria-label', h1.textContent);
+            h1.replaceChildren(...letters);
+            draw();
+            let timer = 0;
+            function wobble(on) {
+              clearInterval(timer);
+              if (on) timer = setInterval(draw, 800);
+            }
+            if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+              wobble(true);
+              // The address box comes after this script, so its focus is caught as it bubbles.
+              document.addEventListener('focusin', (e) => { if (e.target.id === 'address') wobble(false); });
+              document.addEventListener('focusout', (e) => { if (e.target.id === 'address') wobble(true); });
+            } }
+        </script>
         <!-- Without JavaScript the form still opens the map, just not at the address. -->
         <form class="search" id="search" action="https://map.tenantcommons.ca/" method="get" autocomplete="off">
           <div class="box">
-            <input id="address" type="text" placeholder="Your address, e.g. 1865 E 10th Ave"
+            <input id="address" type="text" placeholder="e.g. 1865 E 10th Ave"
                    aria-label="Your address" role="combobox" aria-autocomplete="list"
                    aria-expanded="false" aria-controls="suggestions" spellcheck="false">
             <button type="submit">Find on map</button>
@@ -26,15 +70,83 @@
           <ul class="suggestions" id="suggestions" role="listbox" hidden></ul>
         </form>
         <p class="fine" id="status" aria-live="polite">City of Vancouver addresses. Your address isn't stored.</p>
-        <p class="cont"><b>What else do they own?</b> What is it all worth? Is it up for rezoning or development? These should be easy questions. Tenant Commons is building the tools and shared records to answer them.</p>
+        <p class="cont"><b>What else do they own?</b> What is it all worth? Is it up for rezoning or development? These should be easy questions. <i>Tenant Commons is building the tools and shared records to answer them.</i></p>
       </main>
-      <a class="more" href="#about">Read more ⌄</a>
+      <a class="more" href="#about">Read more
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+      </a>
     </section>
 
     <section id="about">
+      <span class="tag">In development</span>
       <h2>About</h2>
-      <p>Tenant Commons is building shared, lasting infrastructure for tenant organizing. It combines public information, like City of Vancouver open data, rental licences and records released through freedom of information requests, into one place, and adds what tenants and organizers learn about who is really behind a building. It starts with who owns and manages Vancouver's rental buildings.</p>
-      <p>Questions, corrections, or want to get involved? Write to <a href="mailto:info@tenantcommons.ca">info@tenantcommons.ca</a>.</p>
+      <p class="lead">Finding out who owns your building should be simple. It usually isn't.</p>
+
+      <div class="row">
+        <h3>The problem</h3>
+        <div>
+          <p>Many rental buildings in Vancouver aren't owned by a person you could name. They're owned by companies with names like "1234567 B.C. Ltd.", and those companies are often owned by other companies.</p>
+          <ol class="chain" aria-label="An ownership chain">
+            <li>Your building</li><li>1234567 B.C. Ltd.</li><li>Another company</li><li class="unknown" aria-label="Unknown owner">?</li>
+          </ol>
+          <p>The address on file might be a lawyer's office. Some of this is done on purpose, to make owners hard to trace.</p>
+        </div>
+      </div>
+
+      <div class="row">
+        <h3>Why it stays hard</h3>
+        <div>
+          <p>The City's records are built to track property: what it sold for, what it's worth, what taxes are owed. They can't answer the questions tenants actually ask. Who is my landlord? What else do they own? Is my building about to be sold or torn down?</p>
+          <p>So when a tenant does the digging and finds an answer, it usually stays with them. The next person in the same building has to start over.</p>
+        </div>
+      </div>
+
+      <div class="row">
+        <h3>What we're building</h3>
+        <div>
+          <p>Tenant Commons is a shared place to keep those answers. It brings public data about each building onto one map, and tenants and organizers add what the records can't show.</p>
+          <div class="halves">
+            <div><b>Public records</b><ul><li>What it's worth</li><li>Who holds the business licence</li><li>How it's zoned</li><li>Documents the City released</li></ul></div>
+            <span class="plus" aria-hidden="true">+</span>
+            <div><b>What tenants know</b><ul><li>Who actually manages it</li><li>Whose name is on the letters</li><li>The same landlord under different names</li></ul></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <h3>Where it stands</h3>
+        <p>This is a work in progress. The map already covers Vancouver's rental buildings, but the owner is still unknown for many of them, and a lot is still being built. We're sharing it early because the people who use it should help decide what it becomes.</p>
+      </div>
+    </section>
+
+    <section id="features">
+      <h2>What the map can do</h2>
+      <ul class="cards">
+        <li><h3>Find your building</h3><p>Units, year built, assessed land and building value, and issues on the City's property record.</p></li>
+        <li><h3>Follow the owner</h3><p>Pick a landlord and see every building in their network, even when each one is held by its own numbered company.</p></li>
+        <li><h3>Filter the city</h3><p>Narrow the map by units, year built, assessed value, or how many buildings a landlord holds.</p></li>
+        <li><h3>Follow the evidence</h3><p>Every fact shows the record behind it: a licence, an assessment, an FOI release, or a tenant's report.</p></li>
+        <li><h3>See the gaps</h3><p>Buildings whose ownership hasn't been found yet are marked, so you can see where the records run out.</p></li>
+        <li><h3>Take it with you</h3><p>Browse buildings and landlords as tables and export them as CSV.</p></li>
+      </ul>
+      <a class="go" href="https://map.tenantcommons.ca/">Open the map
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </section>
+
+    <section id="contact">
+      <h2>Contact</h2>
+      <div class="pair">
+        <div>
+          <h3>Something wrong or missing?</h3>
+          <p>If you know who really owns or manages your building, or something on the map is out of date, tell us. Include the address and what you know.</p>
+        </div>
+        <div>
+          <h3>Want to get involved?</h3>
+          <p>Organizers, advocates, and anyone with research or data skills: we'd like to hear what you need from this.</p>
+        </div>
+      </div>
+      <p class="mail"><a href="mailto:info@tenantcommons.ca"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>info@tenantcommons.ca</a></p>
     </section>
   </div>
 </body>
