@@ -120,6 +120,31 @@ section p { font-size: 17px; color: var(--soft); max-width: 38em; margin: 0 0 20
 .mail a { color: var(--ink); display: inline-flex; align-items: center; gap: 10px; }
 .mail svg { flex: none; }
 
+/* Data requests: a page of its own, laid out like About. Its row labels are h2s sized like About's h3s. */
+.page { padding: 48px 0 120px; }
+.page h1 { font-size: clamp(36px, 8vw, 60px); margin-bottom: 20px; }
+.page .row h2 { font-size: 18px; letter-spacing: -.01em; margin: 2px 0 6px; }
+.page ol, .who { font-size: 17px; color: var(--soft); max-width: 38em; margin: 0 0 20px; }
+.page li b { color: var(--ink); font-weight: 600; }
+.page a { color: var(--ink); }
+
+/* Each audience, then its answer as a pill: filled for yes, outlined for "let's talk", grey for no. */
+.who { list-style: none; padding: 0; }
+.who li { padding: 16px 0; border-top: 1px solid var(--line); }
+.who li:first-child { padding-top: 0; border-top: 0; }
+.who li:last-child { padding-bottom: 0; }
+.who p { margin: 6px 0 0; }
+.who p.head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; margin: 0; }
+.answer { font-size: 13px; font-weight: 600; line-height: 1.4; border: 1.5px solid var(--ink); border-radius: 99px; padding: 2px 11px; white-space: nowrap; color: var(--ink); }
+.answer.yes { background: var(--ink); color: #fff; }
+.answer.no { border-color: var(--line); color: var(--faint); }
+
+/* The four questions, numbered in circles. */
+.page ol { list-style: none; padding: 0; counter-reset: ask; }
+.page ol li { counter-increment: ask; position: relative; padding-left: 40px; margin-bottom: 12px; }
+.page ol li::before { content: counter(ask); position: absolute; left: 0; top: 0; width: 26px; height: 26px; display: grid; place-items: center; border: 1.5px solid var(--line); border-radius: 50%; font-size: 13px; font-weight: 600; color: var(--ink); }
+.page .row > :last-child { margin-bottom: 0; }
+
 /* Too narrow for a label column: each label goes above its text. */
 @media (max-width: 860px) {
   .row { grid-template-columns: 1fr; gap: 10px; padding: 24px 0; }
@@ -139,5 +164,6 @@ section p { font-size: 17px; color: var(--soft); max-width: 38em; margin: 0 0 20
   .lead { font-size: 19px; }
   #about, #features, #contact { padding: 48px 0; }
   #contact { padding-bottom: 80px; }
+  .page { padding: 32px 0 80px; }
   .mail { font-size: 19px; }
 }
